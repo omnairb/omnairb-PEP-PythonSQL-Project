@@ -55,24 +55,34 @@ def main():
 def load_and_clean_users(file_path):
     rows = []
     with open(file_path, newline="") as file:
-        # data = csv.DictReader(file)
-        # for i in data:
-        #     if (not None in i):
-        #         rows.append((i["firstName"], i["lastName"]))
         data = csv.reader(file)
         next(data)
         for i in data:
-            if len(i) == 2 and i[0].strip() and i[1].strip():
+            if len(i) == 2 and i[0].strip() and i[1].strip(): #check only 2 rows and no empty values
                 rows.append((i[0].strip(), i[1].strip()))
 
     cursor.executemany("INSERT INTO users (firstName, lastName) VALUES (?, ?)", rows)
+    # cursor.execute("SELECT * FROM users")
+    # for i in cursor.fetchall():
+    #     print(i)
     print("load_users")
 
 
 # This function will load the callLogs.csv file into the callLogs table, discarding any records with incomplete data
 def load_and_clean_call_logs(file_path):
+    rows = []
+    with open(file_path, newline="") as file:
+        data = csv.reader(file)
+        next(data)
+        for i in data:
+            if len(i) == 5 and i[0].strip() and i[1].strip() and i[2].strip() and i[3].strip() and i[4].strip():
+                rows.append((i[0].strip(), i[1].strip(), i[2].strip(), i[3].strip(), i[4].strip()))
 
-    print("TODO: load_call_logs")
+    cursor.executemany("INSERT INTO callLogs (phoneNumber, startTime, endTime, direction, usedID) VALUES (?, ?, ?, ?, ?)", rows)
+    cursor.execute("SELECT * FROM callLogs")
+    for i in cursor.fetchall():
+        print(i)
+    print("load_call_logs")
 
 
 # This function will write analytics data to testUserAnalytics.csv - average call time, and number of calls per user.
