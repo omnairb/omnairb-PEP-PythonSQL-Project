@@ -65,7 +65,7 @@ def load_and_clean_users(file_path):
             if len(i) == 2:
                 rows.append((i[0], i[1]))
 
-    cursor.executemany("INSERT INTO users VALUES (?, ?, ?)", rows)
+    cursor.executemany("INSERT INTO users VALUES (firtName, lastName) (?, ?)", rows)
     print("load_users")
 
 
