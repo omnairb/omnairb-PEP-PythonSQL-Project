@@ -78,7 +78,7 @@ def load_and_clean_call_logs(file_path):
             if len(i) == 5 and i[0].strip() and i[1].strip() and i[2].strip() and i[3].strip() and i[4].strip():
                 rows.append((i[0].strip(), i[1].strip(), i[2].strip(), i[3].strip(), i[4].strip()))
 
-    cursor.executemany("INSERT INTO callLogs (phoneNumber, startTime, endTime, direction, usedID) VALUES (?, ?, ?, ?, ?)", rows)
+    cursor.executemany("INSERT INTO callLogs (phoneNumber, startTime, endTime, direction, usedId) VALUES (?, ?, ?, ?, ?)", rows)
     cursor.execute("SELECT * FROM callLogs")
     for i in cursor.fetchall():
         print(i)
