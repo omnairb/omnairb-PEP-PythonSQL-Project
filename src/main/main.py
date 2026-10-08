@@ -57,7 +57,8 @@ def load_and_clean_users(file_path):
         rows = []
         data = csv.DictReader(file)
         for i in data:
-            rows.append((i["firstName"], i["lastName"]))
+            if len(i) == 2:
+                rows.append((i["firstName"], i["lastName"]))
     print("load_users")
 
 
