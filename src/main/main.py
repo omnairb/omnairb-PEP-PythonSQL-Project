@@ -63,7 +63,7 @@ def load_and_clean_users(file_path):
         next(data)
         for i in data:
             if len(i) == 2:
-                rows.append((r[0], r[1]))
+                rows.append((i[0], i[1]))
     print("load_users")
 
 
