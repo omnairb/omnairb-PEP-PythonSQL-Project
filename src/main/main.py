@@ -86,17 +86,12 @@ def write_user_analytics(csv_file_path):
     #find avg duration of calls
     cursor.execute("SELECT userId, SUM(endTime - startTime) AS duration, COUNT(userId) FROM callLogs GROUP BY userId")
     avg_calltime = {i[0] : (i[1]/i[2]) for i in cursor.fetchall()}
-    print(avg_calltime)
 
-    #find number of call per user
+    #find number of call per user (bit redundant)
     cursor.execute("SELECT userId, COUNT(userId) FROM callLogs GROUP BY userId")
     num_calls = {i[0] : i[1] for i in cursor.fetchall()}
-    print(num_calls)
 
-    for i in avg_calltime:
-        print(f"userId: {i} avgcall: {avg_calltime[i]} numcall: {num_calls[i]}")
-
-
+    #write to the csv
     with open(csv_file_path, 'w', newline='') as file:
         write = csv.writer(file)
         write.writerow(['userId', 'avgDuration', 'numCalls'])
@@ -108,8 +103,16 @@ def write_user_analytics(csv_file_path):
 # This function will write the callLogs ordered by userId, then start time.
 # Then, write the ordered callLogs to orderedCalls.csv
 def write_ordered_calls(csv_file_path):
+    cursor.execute("SELECT callId, phoneNumber, startTime, endTime, direction, userId FROM callLogs ORDER BY userId, startTime")
+    # for i in cursor.fetchall():
+    #     print(i[0])
 
-    print("TODO: write_ordered_calls")
+    with open(csv_file_path, 'w', newline='') as file:
+        write = csv.writer(file)
+        write.writerow(['callId', 'phoneNumber', 'startTime', 'endTime', 'direction', 'userId'])
+        for i in cursor.fetchall():
+            write.writerow([i[0], i[1], i[2], i[3], i[4], i[5]])
+    print("write_ordered_calls")
 
 
 
