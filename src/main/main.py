@@ -41,7 +41,7 @@ def main():
     write_ordered_calls(os.path.join(_RESOURCES_DIR, 'orderedCalls.csv'))
 
     # Helper method that prints the contents of the users and callLogs tables. Uncomment to see data.
-    # select_from_users_and_call_logs()
+    select_from_users_and_call_logs()
 
     # Close the cursor and connection. main function ends here.
     cursor.close()
@@ -83,8 +83,26 @@ def load_and_clean_call_logs(file_path):
 # You must save records consisting of each userId, avgDuration, and numCalls
 # example: 1,105.0,4 - where 1 is the userId, 105.0 is the avgDuration, and 4 is the numCalls.
 def write_user_analytics(csv_file_path):
+    #find avg duration of calls
+    cursor.execute("SELECT userId, SUM(endTime - startTime) AS duration, COUNT(userId) FROM callLogs GROUP BY userId")
+    avg_calltime = {i[0] : (i[1]/i[2]) for i in cursor.fetchall()}
+    print(avg_calltime)
 
-    print("TODO: write_user_analytics")
+    #find number of call per user
+    cursor.execute("SELECT userId, COUNT(userId) FROM callLogs GROUP BY userId")
+    num_calls = {i[0] : i[1] for i in cursor.fetchall()}
+    print(num_calls)
+
+    for i in avg_calltime:
+        print(f"userId: {i} avgcall: {avg_calltime[i]} numcall: {num_calls[i]}")
+
+
+    with open(csv_file_path, 'w', newline='') as file:
+        write = csv.writer(file)
+        write.writerow(['userId', 'avgDuration', 'numCalls'])
+        for i in avg_calltime:
+            write.writerow([i, avg_calltime[i], num_calls[i]])
+    print("write_user_analytics")
 
 
 # This function will write the callLogs ordered by userId, then start time.
