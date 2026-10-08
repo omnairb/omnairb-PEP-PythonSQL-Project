@@ -62,7 +62,7 @@ def load_and_clean_users(file_path):
         data = csv.reader(file)
         next(data)
         for i in data:
-            if len(i) == 2:
+            if len(i) == 2 and (not None in i):
                 rows.append((i[0], i[1]))
 
     cursor.executemany("INSERT INTO users (firstName, lastName) VALUES (?, ?)", rows)
