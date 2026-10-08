@@ -55,10 +55,15 @@ def main():
 def load_and_clean_users(file_path):
     with open(file_path, newline="") as file:
         rows = []
-        data = csv.DictReader(file)
+        # data = csv.DictReader(file)
+        # for i in data:
+        #     if (not None in i):
+        #         rows.append((i["firstName"], i["lastName"]))
+        data = csv.reader(file)
+        next(data)
         for i in data:
-            if (not None in i):
-                rows.append((i["firstName"], i["lastName"]))
+            if len(i) == 2:
+                rows.append((r[0], r[1]))
     print("load_users")
 
 
