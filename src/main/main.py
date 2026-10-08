@@ -58,8 +58,10 @@ def load_and_clean_users(file_path):
         data = csv.reader(file)
         next(data)
         for i in data:
-            if len(i) == 2 and i[0].strip() and i[1].strip(): #check only 2 rows and no empty values
-                rows.append((i[0].strip(), i[1].strip()))
+            if len(i) == 2 and all(j.strip() for j in i):
+                rows.append(tuple(j.strip() for j in i))
+            # if len(i) == 2 and i[0].strip() and i[1].strip(): #check only 2 rows and no empty values
+            #     rows.append((i[0].strip(), i[1].strip()))
 
     cursor.executemany("INSERT INTO users (firstName, lastName) VALUES (?, ?)", rows)
     print("load_users")
